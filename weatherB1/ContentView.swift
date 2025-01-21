@@ -8,16 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var isNight: Bool = false
+    
+    
+    
     var body: some View {
         ZStack{
-            Color.blue
-                .edgesIgnoringSafeArea(.all)
+            BackgroundView(topColor: isNight ? .black : .blue, botColor: .white)
             VStack{
-                Text("Shacoville, SH")
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundStyle(.white)
-                Image(systemName: "cloud.sun.fill")
+                Spacer()
+                HStack{
+                    Text("Shacoville, SH")
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(.white)
+                    
+                    Button {
+                        reloadTemperature()
+                    } label : {
+                        Image(systemName: "arrow.clockwise.circle")
+                            .font(.title)
+                            .foregroundStyle(.white)
+                    }
+                }
+                Image(systemName: isNight ? "moon.stars.fill" : "cloud.sun.fill")
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -27,17 +42,17 @@ struct ContentView: View {
                     .foregroundStyle(.white)
                     .padding(.bottom, 40)
                 HStack(spacing: 20){
-                    WeatherDayView(dayOfWeek: "Mon", imageName: "cloud.sun.fill", temperature: 22)
-                    WeatherDayView(dayOfWeek: "Tue", imageName: "sun.max.fill", temperature: 23)
-                    WeatherDayView(dayOfWeek: "Wed", imageName: "wind.snow", temperature: 0)
-                    WeatherDayView(dayOfWeek: "Thu", imageName: "snow", temperature: -2)
-                    WeatherDayView(dayOfWeek: "Fry", imageName: "cloud.rain.fill", temperature: 10)
+                    WeatherDayView(temperature: forecasts[0])
+                    WeatherDayView(temperature: forecasts[1])
+                    WeatherDayView(temperature: forecasts[2])
+                    WeatherDayView(temperature: forecasts[3])
+                    WeatherDayView(temperature: forecasts[4])
                 }
                 
                 Spacer()
                 
                 Button{
-                    print("button pressed")
+                    isNight.toggle()
                 } label: {
                     Text("Change Day Time")
                         .frame(width: 280, height: 50)
@@ -55,21 +70,19 @@ struct ContentView: View {
 
 struct WeatherDayView: View {
     
-    var dayOfWeek: String
-    var imageName: String
-    var temperature: Int
+    var temperature: Temperature
 
     var body: some View {
         VStack{
-            Text(dayOfWeek)
+            Text(temperature.dayOfWeek)
                 .font(.title2)
                 .foregroundStyle(.white)
-            Image(systemName: imageName)
+            Image(systemName: temperature.imageName)
                 .renderingMode(.original)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 40, height: 40)
-            Text("\(temperature)°")
+            Text("\(temperature.temp)°")
                 .font(.title2)
                 .foregroundStyle(.white)
         }
