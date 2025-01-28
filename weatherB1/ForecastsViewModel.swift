@@ -8,7 +8,8 @@
 import Foundation
 
 class ForecastsViewModel: ObservableObject {
-    @Published private var forecasts: [Temperature] = []
+    //modification de l'attribut en public
+    @Published var forecasts: [Temperature] = []
     
     init() {
         getForecasts()

@@ -11,6 +11,9 @@ struct ContentView: View {
     
     @State var isNight: Bool = false
     
+    //déclaration de l'objet ForecastViewModel
+    @EnvironmentObject var forecastsVM: ForecastsViewModel
+    
     
     
     var body: some View {
@@ -25,7 +28,8 @@ struct ContentView: View {
                         .foregroundStyle(.white)
                     
                     Button {
-                        reloadTemperature()
+                        // accès grâce au nouvel objet
+                        forecastsVM.reloadTemperature()
                     } label : {
                         Image(systemName: "arrow.clockwise.circle")
                             .font(.title)
@@ -42,11 +46,11 @@ struct ContentView: View {
                     .foregroundStyle(.white)
                     .padding(.bottom, 40)
                 HStack(spacing: 20){
-                    WeatherDayView(temperature: forecasts[0])
-                    WeatherDayView(temperature: forecasts[1])
-                    WeatherDayView(temperature: forecasts[2])
-                    WeatherDayView(temperature: forecasts[3])
-                    WeatherDayView(temperature: forecasts[4])
+                    WeatherDayView(temperature: forecastsVM.forecasts[0])
+                    WeatherDayView(temperature: forecastsVM.forecasts[1])
+                    WeatherDayView(temperature: forecastsVM.forecasts[2])
+                    WeatherDayView(temperature: forecastsVM.forecasts[3])
+                    WeatherDayView(temperature: forecastsVM.forecasts[4])
                 }
                 
                 Spacer()
@@ -91,4 +95,6 @@ struct WeatherDayView: View {
 
 #Preview {
     ContentView()
+        // ajout de l'objet ForecastsViewModel dans l'espace partagé entre les vues
+        .environmentObject(ForecastsViewModel())
 }
